@@ -2,11 +2,20 @@ import React from "react";
 import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 function formatLastUpdated(text) {
-  return `Last updated ${text}`;
+  if (!text) return "";
+  const date = new Date(text);
+  return `Last updated ${date.toLocaleString()}`;
 }
 
-const NotesList = ({ notes, onAddNote }) => {
+const NotesList = ({ notes, onAddNote, setActiveSection }) => {
   const hasNotes = notes && notes.length > 0;
+
+  // Sort notes by lastUpdated (descending: most recent first)
+  const sortedNotes = hasNotes
+    ? [...notes].sort(
+        (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
+      )
+    : [];
 
   return (
     <div className="flex flex-col flex-grow p-6 bg-gray-50 h-screen overflow-y-auto">
@@ -19,7 +28,7 @@ const NotesList = ({ notes, onAddNote }) => {
       {/* Add Note Button */}
       <div className="flex justify-end mb-4">
         <button
-          onClick={() => setActiveSection("create")}
+          onClick={onAddNote}
           className="m-4 p-4 flex items-center justify-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
         >
           <PlusIcon className="h-5 w-5" />
@@ -40,7 +49,7 @@ const NotesList = ({ notes, onAddNote }) => {
       {/* Notes or Empty State */}
       {hasNotes ? (
         <div className="space-y-4">
-          {notes.map((note) => {
+          {sortedNotes.map((note) => {
             let badgeText = "";
             let badgeClass = "";
 
@@ -54,6 +63,13 @@ const NotesList = ({ notes, onAddNote }) => {
               badgeText = "Unsynced";
               badgeClass = "bg-red-100 text-red-700";
             }
+
+            // Show a preview (first 100 chars) of the content
+            const preview = note.content
+              ? note.content.length > 100
+                ? note.content.slice(0, 100) + "..."
+                : note.content
+              : "";
 
             return (
               <div
@@ -77,7 +93,7 @@ const NotesList = ({ notes, onAddNote }) => {
                 <p className="text-xs text-gray-500 mt-1 mb-2">
                   {formatLastUpdated(note.lastUpdated)}
                 </p>
-                <p className="text-sm text-gray-700 truncate">{note.preview}</p>
+                <p className="text-sm text-gray-900 truncate">{preview}</p>
                 <div className="flex justify-end mt-2">
                   <button
                     aria-label="More options"

@@ -1,7 +1,7 @@
 import NotesList from "./NotesList";
 import Title from "./Title";
 
-export default function MainContent({ activeSection, onCreateNote }) {
+export default function MainContent({ activeSection, onCreateNote, notes, setActiveSection }) {
     switch (activeSection) {
       case "title":
         return (<Title />);
@@ -12,6 +12,15 @@ export default function MainContent({ activeSection, onCreateNote }) {
             <h2 className="text-xl font-semibold mb-2">Search Notes</h2>
             <p>Search bar is just a placeholder in sidebar for now.</p>
           </div>
+        );
+
+      case "notesList":
+        return (
+          <NotesList
+            notes={notes}
+            onAddNote={onCreateNote}
+            setActiveSection={setActiveSection}
+          />
         );
   
       case "sync":
@@ -59,11 +68,6 @@ export default function MainContent({ activeSection, onCreateNote }) {
             <p>Email: user@example.com</p>
           </div>
         );
-
-        case "notesList":
-            return (
-                <NotesList />
-            );
   
       default:
         return <div className="p-6 text-gray-900">Select a section from sidebar</div>;
