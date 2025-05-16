@@ -1,5 +1,5 @@
 import React from "react";
-import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon, PlusIcon, PencilIcon } from "@heroicons/react/24/outline";
 
 function formatLastUpdated(text) {
   if (!text) return "";
@@ -7,14 +7,10 @@ function formatLastUpdated(text) {
   return `Last updated ${date.toLocaleString()}`;
 }
 
-const NotesList = ({ notes, onAddNote, setActiveSection }) => {
+const NotesList = ({ notes, onAddNote, onDeleteNote, onEditNote }) => {
   const hasNotes = notes && notes.length > 0;
-
-  // Sort notes by lastUpdated (descending: most recent first)
   const sortedNotes = hasNotes
-    ? [...notes].sort(
-        (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-      )
+    ? [...notes].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     : [];
 
   return (
@@ -36,16 +32,6 @@ const NotesList = ({ notes, onAddNote, setActiveSection }) => {
         </button>
       </div>
 
-      {/* Search Bar */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search notes..."
-          disabled
-          className="w-full px-4 py-2 rounded border border-gray-300 bg-white text-gray-700 placeholder-gray-400 cursor-not-allowed focus:outline-none"
-        />
-      </div>
-
       {/* Notes or Empty State */}
       {hasNotes ? (
         <div className="space-y-4">
@@ -53,18 +39,14 @@ const NotesList = ({ notes, onAddNote, setActiveSection }) => {
             let badgeText = "";
             let badgeClass = "";
 
-            if (note.syncStatus === "synced") {
+            if (note.synced) {
               badgeText = "Synced";
               badgeClass = "bg-green-100 text-green-700";
-            } else if (note.syncStatus === "syncing") {
-              badgeText = "Syncing...";
-              badgeClass = "bg-yellow-100 text-yellow-800";
-            } else if (note.syncStatus === "unsynced") {
+            } else {
               badgeText = "Unsynced";
               badgeClass = "bg-red-100 text-red-700";
             }
 
-            // Show a preview (first 100 chars) of the content
             const preview = note.content
               ? note.content.length > 100
                 ? note.content.slice(0, 100) + "..."
@@ -74,11 +56,7 @@ const NotesList = ({ notes, onAddNote, setActiveSection }) => {
             return (
               <div
                 key={note.id}
-                className={`p-4 rounded-lg shadow-sm bg-white border ${
-                  note.syncStatus === "syncing"
-                    ? "border-yellow-300"
-                    : "border-transparent"
-                }`}
+                className="p-4 rounded-lg shadow-sm bg-white border border-transparent"
               >
                 <div className="flex justify-between items-start">
                   <h3 className="text-md font-semibold text-gray-900">
@@ -91,15 +69,29 @@ const NotesList = ({ notes, onAddNote, setActiveSection }) => {
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 mt-1 mb-2">
-                  {formatLastUpdated(note.lastUpdated)}
+                  {formatLastUpdated(note.updatedAt)}
                 </p>
                 <p className="text-sm text-gray-900 truncate">{preview}</p>
-                <div className="flex justify-end mt-2">
+                <div className="flex justify-end mt-2 space-x-2">
+                  <button
+                    aria-label="Edit"
+                    className="text-blue-500 hover:text-blue-700 text-xs"
+                    onClick={() => onEditNote(note)}
+                  >
+                    <PencilIcon className="h-5 w-5 inline" />
+                    Edit
+                  </button>
                   <button
                     aria-label="More options"
                     className="text-gray-400 hover:text-gray-600 focus:outline-none"
                   >
                     <EllipsisHorizontalIcon className="h-5 w-5" />
+                  </button>
+                  <button
+                    className="text-red-500 hover:text-red-700 text-xs"
+                    onClick={() => onDeleteNote(note.id)}
+                  >
+                    Delete
                   </button>
                 </div>
               </div>

@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export default function NoteModal({ open, onClose, onSave }) {
+export default function NoteModal({ open, onClose, onSave, editingNote }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const titleRef = useRef(null);
 
   useEffect(() => {
     if (open) {
-      setTitle("");
-      setContent("");
+      setTitle(editingNote?.title || "");
+      setContent(editingNote?.content || "");
       setTimeout(() => {
         titleRef.current?.focus();
       }, 100);
     }
-  }, [open]);
+  }, [open, editingNote]);
 
   if (!open) return null;
 
   function handleSave() {
     if (title.trim() || content.trim()) {
-      onSave({ title, content });
+      onSave({ title, content, id: editingNote?.id });
     }
   }
 
@@ -43,7 +43,7 @@ export default function NoteModal({ open, onClose, onSave }) {
           ×
         </button>
         <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
-          Create New Note
+          {editingNote ? "Edit Note" : "Create New Note"}
         </h2>
         <div className="space-y-4">
           <input

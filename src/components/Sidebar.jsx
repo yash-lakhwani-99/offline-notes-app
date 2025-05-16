@@ -6,26 +6,30 @@ import {
   PlusIcon,
   EllipsisVerticalIcon,
   UserCircleIcon,
-  Bars3Icon, // Import the list icon
+  Bars3Icon,
 } from "@heroicons/react/24/outline";
 
-export default function Sidebar({ 
-  activeSection, 
-  setActiveSection, 
-  isOnline, 
-  onCreateNote 
+export default function Sidebar({
+  activeSection,
+  setActiveSection,
+  isOnline,
+  onCreateNote,
 }) {
   return (
     <div className="hidden md:flex flex-col w-80 bg-white border-r border-gray-300 h-screen">
       {/* Title */}
-      <div className="p-5 border-b border-gray-300 flex items-center space-x-2 cursor-pointer"
-           onClick={() => setActiveSection("title")}>
+      <div
+        className="p-5 border-b border-gray-300 flex items-center space-x-2 cursor-pointer"
+        onClick={() => setActiveSection("title")}
+      >
         <h1 className="font-bold text-lg text-gray-900">Markdown Notes</h1>
       </div>
 
       {/* Search Bar */}
-      <div className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
-           onClick={() => setActiveSection("search")}>
+      <div
+        className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
+        onClick={() => setActiveSection("search")}
+      >
         <MagnifyingGlassIcon className="h-5 w-5 text-gray-700" />
         <input
           type="text"
@@ -36,20 +40,25 @@ export default function Sidebar({
       </div>
 
       {/* Sync Status */}
-      <div className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
-           onClick={() => setActiveSection("sync")}>
+      <div
+        className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
+        onClick={() => setActiveSection("sync")}
+      >
         <ArrowPathIcon className="h-5 w-5 text-gray-700" />
         <span className="text-gray-900">All changes synced</span>
       </div>
 
       {/* Connection Status */}
-      <div className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
-           onClick={() => setActiveSection("connection")}>
-        <WifiIcon className={`h-5 w-5 ${isOnline ? "text-green-600" : "text-red-600"}`} />
+      <div
+        className="p-4 border-b border-gray-200 flex items-center space-x-2 cursor-pointer"
+        onClick={() => setActiveSection("connection")}
+      >
+        <WifiIcon
+          className={`h-5 w-5 ${isOnline ? "text-green-600" : "text-red-600"}`}
+        />
         <span className="text-gray-900">{isOnline ? "Online" : "Offline"}</span>
       </div>
 
-      
       {/* Notes List Button */}
       <button
         onClick={() => setActiveSection("notesList")}
@@ -59,9 +68,20 @@ export default function Sidebar({
         <span>Notes List</span>
       </button>
 
+      {/* Create Note Button */}
+      <button
+        onClick={onCreateNote}
+        className="mx-4 mb-4 flex items-center justify-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
+      >
+        <PlusIcon className="h-5 w-5" />
+        <span>Create Note</span>
+      </button>
+
       {/* Note Options */}
-      <div className="px-4 py-3 border-t border-gray-300 flex justify-end cursor-pointer"
-           onClick={() => setActiveSection("options")}>
+      <div
+        className="px-4 py-3 border-t border-gray-300 flex justify-end cursor-pointer"
+        onClick={() => setActiveSection("options")}
+      >
         <EllipsisVerticalIcon className="h-6 w-6 text-gray-700" />
       </div>
 

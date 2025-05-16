@@ -1,5 +1,5 @@
 import React from "react";
-import { DocumentTextIcon, ClockIcon, CloudOfflineIcon, CloudIcon } from "@heroicons/react/24/outline";
+import { DocumentTextIcon, ClockIcon, CloudIcon } from "@heroicons/react/24/outline";
 
 const Title = () => {
   return (
@@ -23,8 +23,6 @@ const Title = () => {
           <span className="text-sm font-semibold">Offline Mode</span>
         </div>
       </div>
-
-      {/* Use a simple placeholder img or comment out this <img> to test */}
       <img
         src="https://plus.unsplash.com/premium_photo-1683309567810-4d232ee83d2f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bm90ZXN8ZW58MHx8MHx8fDA%3D"
         alt=" "
