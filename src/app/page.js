@@ -6,6 +6,7 @@ import NoteModal from "@/components/notesModal";
 import { getAllNotes, saveNote, deleteNote } from "@/indexedDB/db";
 import { syncNotesToAPI, pullNotesFromAPI } from "@/utils/sync";
 import { deleteNote as deleteApiNote } from "@/api/notesApi";
+import { cleanupDuplicates } from "@/utils/cleanup";
 
 export default function Page() {
   const [notes, setNotes] = useState([]);
@@ -30,6 +31,7 @@ export default function Page() {
       setIsOnline(true);
       await syncNotesToAPI();
       await pullNotesFromAPI();
+      await cleanupDuplicates();
       setNotes(await getAllNotes());
     }
     function handleOffline() {
@@ -69,6 +71,7 @@ export default function Page() {
     if (isOnline) {
       await syncNotesToAPI();
       await pullNotesFromAPI();
+      await cleanupDuplicates();
     }
     setNotes(await getAllNotes());
     setModalOpen(false);
